@@ -11,12 +11,14 @@ const swapSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    requesterSkill: {
-        type: String,
+    // UPDATED: Changed from a single String to an array of Strings
+    requesterSkills: {
+        type: [String],
         required: true,
     },
-    responderSkill: {
-        type: String,
+    // UPDATED: Changed from a single String to an array of Strings
+    responderSkills: {
+        type: [String],
         required: true,
     },
     message: {

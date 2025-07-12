@@ -1,3 +1,4 @@
+
 import Swap from '../models/Swap.js';
 import User from '../models/User.js';
 
@@ -5,25 +6,42 @@ import User from '../models/User.js';
 // @route   POST /api/swaps
 // @access  Private
 export const createSwapRequest = async (req, res) => {
-    const { responderId, requesterSkill, responderSkill, message } = req.body;
-
     try {
+        const { responderId, requesterSkills, responderSkills, message } = req.body;
+
+        // More specific validation to find the exact problem
+        if (!requesterSkills || !Array.isArray(requesterSkills) || requesterSkills.length === 0) {
+            return res.status(400).json({ success: false, message: 'You must offer at least one skill.' });
+        }
+        if (!responderSkills || !Array.isArray(responderSkills) || responderSkills.length === 0) {
+            return res.status(400).json({ success: false, message: 'You must request at least one skill.' });
+        }
+        if (!message || message.trim() === '') {
+            return res.status(400).json({ success: false, message: 'A message is required.' });
+        }
+
         const swap = new Swap({
             requester: req.user.id,
             responder: responderId,
-            requesterSkill,
-            responderSkill,
+            requesterSkills,
+            responderSkills,
             message,
         });
 
         const createdSwap = await swap.save();
         res.status(201).json(createdSwap);
+
     } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+        console.error("Error in createSwapRequest:", error); // Log the full error on the server
+        // Handle Mongoose validation errors specifically
+        if (error.name === 'ValidationError') {
+            return res.status(400).json({ success: false, message: 'Data validation failed.', details: error.errors });
+        }
+        res.status(500).json({ success: false, message: 'Server error while creating swap request.' });
     }
 };
 
-// @desc    Get all swaps for a user
+// @desc    Get all swaps for the logged-in user
 // @route   GET /api/swaps
 // @access  Private
 export const getUserSwaps = async (req, res) => {
@@ -38,7 +56,7 @@ export const getUserSwaps = async (req, res) => {
     }
 };
 
-// @desc    Update swap status
+// @desc    Update swap status (accept/reject)
 // @route   PUT /api/swaps/:id
 // @access  Private
 export const updateSwapStatus = async (req, res) => {
@@ -103,7 +121,6 @@ export const rateSwap = async (req, res) => {
             return res.status(400).json({ message: 'Can only rate accepted swaps.' });
         }
 
-        // Determine who is being rated
         const raterId = req.user.id;
         let ratedUserId;
 
@@ -121,7 +138,6 @@ export const rateSwap = async (req, res) => {
             return res.status(404).json({ message: 'User to be rated not found.' });
         }
 
-        // Add the new rating
         const newRating = {
             rater: raterId,
             value: rating,
@@ -129,13 +145,11 @@ export const rateSwap = async (req, res) => {
         };
         ratedUser.ratings.push(newRating);
 
-        // Recalculate average rating
         const totalRating = ratedUser.ratings.reduce((acc, item) => item.value + acc, 0);
         ratedUser.avgRating = totalRating / ratedUser.ratings.length;
 
         await ratedUser.save();
 
-        // Update swap status to completed
         swap.status = 'completed';
         await swap.save();
 

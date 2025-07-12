@@ -1,7 +1,99 @@
 import React, { useState } from 'react';
 import { X, Star } from 'lucide-react';
 
-// ... (LoginModal, RequestModal, and ConfirmModal are the same)
+// UPDATED: RequestModal now has better validation feedback
+export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }) => {
+    const [requesterSkills, setRequesterSkills] = useState([]);
+    const [responderSkills, setResponderSkills] = useState([]);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState(''); // State for inline error message
+
+    // Toggles a skill in the selection array
+    const handleSkillToggle = (skill, list, setList) => {
+        setError(''); // Clear error when user makes a selection
+        setList(prev => 
+            prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
+        );
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Updated validation check
+        if (requesterSkills.length === 0 || responderSkills.length === 0 || !message) {
+            setError("Please select at least one skill to offer, one to request, and write a message.");
+            return;
+        }
+        setError(''); // Clear error on successful submission
+        onSwapRequest({
+            responderId: targetUser._id,
+            requesterSkills,
+            responderSkills,
+            message,
+        });
+    };
+
+    // Reusable checkbox component for skills
+    const SkillCheckbox = ({ skill, isSelected, onToggle }) => (
+        <label className={`inline-flex items-center justify-center px-3 py-2 border rounded-full cursor-pointer transition-colors ${isSelected ? 'bg-purple-600 border-purple-500 text-white' : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'}`}>
+            <input type="checkbox" className="hidden" checked={isSelected} onChange={() => onToggle(skill)} />
+            <span>{skill}</span>
+        </label>
+    );
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-lg relative">
+                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <X size={24} />
+                </button>
+                <h2 className="text-2xl font-bold mb-6 text-white text-center">Send Swap Request to {targetUser.name}</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Choose skills you'll offer:</label>
+                        <div className="flex flex-wrap gap-2 p-3 bg-gray-900 rounded-lg">
+                            {currentUser.skillsOffered.map(skill => (
+                                <SkillCheckbox 
+                                    key={skill} 
+                                    skill={skill} 
+                                    isSelected={requesterSkills.includes(skill)}
+                                    onToggle={(s) => handleSkillToggle(s, requesterSkills, setRequesterSkills)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Choose skills you want:</label>
+                        <div className="flex flex-wrap gap-2 p-3 bg-gray-900 rounded-lg">
+                             {targetUser.skillsWanted.map(skill => (
+                                <SkillCheckbox 
+                                    key={skill} 
+                                    skill={skill} 
+                                    isSelected={responderSkills.includes(skill)}
+                                    onToggle={(s) => handleSkillToggle(s, responderSkills, setResponderSkills)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Message</label>
+                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows="4" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Introduce yourself and explain why you'd like to swap skills..."></textarea>
+                    </div>
+
+                    {/* Display error message here */}
+                    {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+
+                    <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        Submit Request
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+
+// --- OTHER MODALS (LoginModal, ConfirmModal, RatingModal) ---
+// (These modals remain unchanged)
 
 export const LoginModal = ({ onLogin, onSwitchToRegister }) => (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
@@ -17,58 +109,6 @@ export const LoginModal = ({ onLogin, onSwitchToRegister }) => (
         </div>
     </div>
 );
-
-export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }) => {
-    const [requesterSkill, setRequesterSkill] = useState(currentUser.skillsOffered[0] || '');
-    const [responderSkill, setResponderSkill] = useState(targetUser.skillsWanted[0] || '');
-    const [message, setMessage] = useState('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (!requesterSkill || !responderSkill || !message) {
-            console.error("Please fill all fields.");
-            return;
-        }
-        onSwapRequest({
-            responderId: targetUser._id,
-            requesterSkill,
-            responderSkill,
-            message,
-        });
-    };
-
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-md relative">
-                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white">
-                    <X size={24} />
-                </button>
-                <h2 className="text-2xl font-bold mb-6 text-white text-center">Send Swap Request to {targetUser.name}</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">Choose one of your offered skills</label>
-                        <select value={requesterSkill} onChange={(e) => setRequesterSkill(e.target.value)} className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                            {currentUser.skillsOffered.map(skill => <option key={skill} value={skill}>{skill}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">Choose one of their wanted skills</label>
-                        <select value={responderSkill} onChange={(e) => setResponderSkill(e.target.value)} className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                            {targetUser.skillsWanted.map(skill => <option key={skill} value={skill}>{skill}</option>)}
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-1">Message</label>
-                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows="4" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Introduce yourself and explain why you'd like to swap skills..."></textarea>
-                    </div>
-                    <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                        Submit Request
-                    </button>
-                </form>
-            </div>
-        </div>
-    );
-};
 
 export const ConfirmModal = ({ title, message, onConfirm, onCancel }) => (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
@@ -87,7 +127,6 @@ export const ConfirmModal = ({ title, message, onConfirm, onCancel }) => (
     </div>
 );
 
-// --- NEW RATING MODAL ---
 export const RatingModal = ({ onSubmit, onClose }) => {
     const [rating, setRating] = useState(0);
     const [feedback, setFeedback] = useState('');

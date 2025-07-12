@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { Search, Trash2, Star } from 'lucide-react';
 import { ConfirmModal, RatingModal } from '../components/Modals';
+import SkillTag from '../components/SkillTag'; // Import SkillTag for display
 
 const SwapRequestsPage = () => {
     const { currentUser, showNotification } = useAuth();
@@ -143,12 +144,22 @@ const SwapRequestsPage = () => {
                                 <img src={otherUser.profilePhoto} alt={otherUser.name} className="w-24 h-24 rounded-full border-4 border-gray-600" />
                                 <div className="flex-grow text-center md:text-left">
                                     <h3 className="text-xl font-bold text-white">{otherUser.name}</h3>
-                                    <p className="text-sm text-gray-400 mt-1">
-                                        {isResponder ? `${otherUser.name} requests:` : `You requested:`}
-                                        <span className="font-bold text-white"> {swap.requesterSkill}</span> for 
-                                        <span className="font-bold text-white"> {swap.responderSkill}</span>
-                                    </p>
-                                    <p className="text-gray-300 mt-2 italic">"{swap.message}"</p>
+                                    {/* UPDATED: Display logic for multiple skills */}
+                                    <div className="text-sm text-gray-400 mt-2 space-y-2">
+                                        <div>
+                                            <p>{isResponder ? `${otherUser.name} requests:` : `You requested:`}</p>
+                                            <div className="flex flex-wrap gap-2 mt-1">
+                                                {swap.responderSkills.map(skill => <SkillTag key={skill} skill={skill} />)}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>In exchange for:</p>
+                                            <div className="flex flex-wrap gap-2 mt-1">
+                                                {swap.requesterSkills.map(skill => <SkillTag key={skill} skill={skill} />)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-300 mt-3 italic">"{swap.message}"</p>
                                 </div>
                                 <div className="flex flex-col items-center space-y-2">
                                     <p className="font-bold text-lg">Status: <span className={getStatusColor(swap.status)}>{swap.status.charAt(0).toUpperCase() + swap.status.slice(1)}</span></p>
