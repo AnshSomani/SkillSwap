@@ -15,19 +15,25 @@ Develop a Skill Swap Platform — a mini application that enables users to list 
 
 ---
 
+### **Video Link: **
+
+---
+
+---
+
 ### **Live Website: [https://skill-swap-3y7n.onrender.com/](https://skill-swap-3y7n.onrender.com/)**
 
 ---
 
 ## Screenshots
 
-| Login Page                               | Dashboard / Homepage                     |
+| Login Page                               | Sign Up                     |
 | ---------------------------------------- | ---------------------------------------- |
-| ![Login Page](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(15).png) | ![Dashboard](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(14).png) |
-| **Swap Request Page** | **Admin Dashboard** |
-| ![Swap Request](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(13).png) | ![Admin Dashboard](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(16).png) |
-| **Swap Monitoring (Admin)** |
-| ![Swap Monitoring](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(17).png) |
+| ![Login Page](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(15).png) | ![Sign Up](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(18).png) |
+| **Swap Request Page** | **Dashboard** |
+| ![Swap Request](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(13).png) | ![Dashboard](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(14).png) |
+| **Swap Monitoring (Admin)** | **Admin Dashboard** |
+| ![Swap Monitoring](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(17).png) |![Admin Dashboard](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(16).png)|
 
 ---
 
@@ -64,29 +70,3 @@ Develop a Skill Swap Platform — a mini application that enables users to list 
 | **Deployment**| Render                                           |
 
 ---
-
-
-
-
-**Website link: https://skill-swap-3y7n.onrender.com/**
-
-Login Page:
-
-![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(15).png)
-
-Dashboard:
-
-![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(14).png)
-
-Swap Request:
-
-![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(13).png)
-
-Admin Dashboard:
-
-![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(16).png)
-
-Swap Monitoring:
-
-![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(17).png)
-
