@@ -1,16 +1,33 @@
-import React, { useState } from 'react';
-import { X, Star } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Star, Trash2 } from 'lucide-react';
+import SkillTag from './SkillTag'; // Import SkillTag
 
-// UPDATED: RequestModal now has better validation feedback
+// ... (LoginModal, RequestModal, ConfirmModal, RatingModal are the same)
+// I'm adding a new EditUserModal at the end
+
+export const LoginModal = ({ onLogin, onSwitchToRegister }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-white w-full max-w-sm">
+            <h2 className="text-2xl font-bold mb-4 text-center">Login Required</h2>
+            <p className="text-center mb-6 text-gray-300">You need to be logged in to request a swap.</p>
+            <button onClick={onLogin} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Go to Login
+            </button>
+            <p className="text-center mt-4 text-sm text-gray-400">
+                New here? <button onClick={onSwitchToRegister} className="text-purple-400 hover:underline">Create an account</button>
+            </p>
+        </div>
+    </div>
+);
+
 export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }) => {
     const [requesterSkills, setRequesterSkills] = useState([]);
     const [responderSkills, setResponderSkills] = useState([]);
     const [message, setMessage] = useState('');
-    const [error, setError] = useState(''); // State for inline error message
+    const [error, setError] = useState('');
 
-    // Toggles a skill in the selection array
     const handleSkillToggle = (skill, list, setList) => {
-        setError(''); // Clear error when user makes a selection
+        setError('');
         setList(prev => 
             prev.includes(skill) ? prev.filter(s => s !== skill) : [...prev, skill]
         );
@@ -18,12 +35,11 @@ export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Updated validation check
         if (requesterSkills.length === 0 || responderSkills.length === 0 || !message) {
             setError("Please select at least one skill to offer, one to request, and write a message.");
             return;
         }
-        setError(''); // Clear error on successful submission
+        setError('');
         onSwapRequest({
             responderId: targetUser._id,
             requesterSkills,
@@ -32,7 +48,6 @@ export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }
         });
     };
 
-    // Reusable checkbox component for skills
     const SkillCheckbox = ({ skill, isSelected, onToggle }) => (
         <label className={`inline-flex items-center justify-center px-3 py-2 border rounded-full cursor-pointer transition-colors ${isSelected ? 'bg-purple-600 border-purple-500 text-white' : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'}`}>
             <input type="checkbox" className="hidden" checked={isSelected} onChange={() => onToggle(skill)} />
@@ -78,10 +93,7 @@ export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }
                         <label className="block text-sm font-medium text-gray-300 mb-1">Message</label>
                         <textarea value={message} onChange={(e) => setMessage(e.target.value)} rows="4" className="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Introduce yourself and explain why you'd like to swap skills..."></textarea>
                     </div>
-
-                    {/* Display error message here */}
                     {error && <p className="text-red-400 text-sm text-center">{error}</p>}
-
                     <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
                         Submit Request
                     </button>
@@ -90,25 +102,6 @@ export const RequestModal = ({ currentUser, targetUser, onSwapRequest, onClose }
         </div>
     );
 };
-
-
-// --- OTHER MODALS (LoginModal, ConfirmModal, RatingModal) ---
-// (These modals remain unchanged)
-
-export const LoginModal = ({ onLogin, onSwitchToRegister }) => (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-white w-full max-w-sm">
-            <h2 className="text-2xl font-bold mb-4 text-center">Login Required</h2>
-            <p className="text-center mb-6 text-gray-300">You need to be logged in to request a swap.</p>
-            <button onClick={onLogin} className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-                Go to Login
-            </button>
-            <p className="text-center mt-4 text-sm text-gray-400">
-                New here? <button onClick={onSwitchToRegister} className="text-purple-400 hover:underline">Create an account</button>
-            </p>
-        </div>
-    </div>
-);
 
 export const ConfirmModal = ({ title, message, onConfirm, onCancel }) => (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
@@ -181,6 +174,57 @@ export const RatingModal = ({ onSubmit, onClose }) => {
                         Submit Rating & Complete
                     </button>
                 </form>
+            </div>
+        </div>
+    );
+};
+
+// --- NEW MODAL FOR EDITING USERS ---
+export const EditUserModal = ({ user, onSave, onDelete, onClose }) => {
+    const [userData, setUserData] = useState(user);
+
+    const handleSkillRemove = (skillToRemove, type) => {
+        if (type === 'offered') {
+            setUserData({ ...userData, skillsOffered: userData.skillsOffered.filter(s => s !== skillToRemove) });
+        } else {
+            setUserData({ ...userData, skillsWanted: userData.skillsWanted.filter(s => s !== skillToRemove) });
+        }
+    };
+
+    const handleSaveChanges = () => {
+        onSave(userData);
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 w-full max-w-2xl relative">
+                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-white"><X size={24} /></button>
+                <h2 className="text-2xl font-bold mb-6 text-white text-center">Edit User: {user.name}</h2>
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Skills Offered</label>
+                        <div className="flex flex-wrap gap-2 p-2 bg-gray-900 rounded-lg border border-gray-600 min-h-[40px]">
+                            {userData.skillsOffered.map(skill => <SkillTag key={skill} skill={skill} onRemove={(s) => handleSkillRemove(s, 'offered')} editable />)}
+                            {userData.skillsOffered.length === 0 && <p className="text-gray-500 text-sm p-1">No skills offered.</p>}
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Skills Wanted</label>
+                        <div className="flex flex-wrap gap-2 p-2 bg-gray-900 rounded-lg border border-gray-600 min-h-[40px]">
+                            {userData.skillsWanted.map(skill => <SkillTag key={skill} skill={skill} onRemove={(s) => handleSkillRemove(s, 'wanted')} editable />)}
+                            {userData.skillsWanted.length === 0 && <p className="text-gray-500 text-sm p-1">No skills wanted.</p>}
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-8 flex justify-between items-center">
+                     <button onClick={handleSaveChanges} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                        Save Changes
+                    </button>
+                    <button onClick={() => onDelete(user._id)} className="bg-red-800 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg flex items-center space-x-2 transition duration-300">
+                        <Trash2 size={16} />
+                        <span>Delete User</span>
+                    </button>
+                </div>
             </div>
         </div>
     );

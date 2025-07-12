@@ -40,7 +40,8 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
-        let result = users.filter(u => u._id !== currentUser?._id);
+        // UPDATED: Added a filter to exclude admin users from the list
+        let result = users.filter(u => u._id !== currentUser?._id && u.role !== 'admin');
 
         if (searchQuery) {
             result = result.filter(u =>

@@ -4,7 +4,9 @@ import { admin } from '../middleware/adminMiddleware.js';
 import { 
     getAllUsers,
     toggleBanUser,
-    getAllSwaps 
+    getAllSwaps,
+    updateUserByAdmin,  // NEW
+    deleteUserByAdmin   // NEW
 } from '../controllers/adminController.js';
 
 const router = express.Router();
@@ -14,6 +16,9 @@ router.use(protect, admin);
 
 router.get('/users', getAllUsers);
 router.put('/users/:id/ban', toggleBanUser);
+router.put('/users/:id', updateUserByAdmin); // NEW ROUTE for editing
+router.delete('/users/:id', deleteUserByAdmin); // NEW ROUTE for deleting
+
 router.get('/swaps', getAllSwaps);
 
 export default router;

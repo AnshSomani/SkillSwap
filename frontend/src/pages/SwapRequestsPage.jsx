@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import { Search, Trash2, Star } from 'lucide-react';
 import { ConfirmModal, RatingModal } from '../components/Modals';
-import SkillTag from '../components/SkillTag'; // Import SkillTag for display
+import SkillTag from '../components/SkillTag';
 
 const SwapRequestsPage = () => {
     const { currentUser, showNotification } = useAuth();
@@ -27,8 +27,10 @@ const SwapRequestsPage = () => {
     };
 
     useEffect(() => {
-        fetchSwaps();
-    }, []);
+        if (currentUser) {
+            fetchSwaps();
+        }
+    }, [currentUser]);
 
     const handleUpdateStatus = async (swapId, status) => {
         try {
@@ -78,16 +80,19 @@ const SwapRequestsPage = () => {
             case 'pending': return 'text-yellow-400';
             case 'accepted': return 'text-green-400';
             case 'rejected': return 'text-red-400';
-            case 'completed': return 'text-blue-400';
+            case 'completed': return 'text-cyan-400'; // Changed to a brighter color
             default: return 'text-gray-400';
         }
     };
     
-    const filteredSwaps = swaps.filter(swap => {
-        const otherUser = swap.requester._id === currentUser._id ? swap.responder : swap.requester;
-        const nameMatch = otherUser.name.toLowerCase().includes(searchQuery.toLowerCase());
-        const statusMatch = filter === 'all' || swap.status === filter;
-        return nameMatch && statusMatch;
+    // UPDATED: Added a filter to ensure both users in a swap exist before proceeding
+    const filteredSwaps = swaps
+        .filter(swap => swap.requester && swap.responder) // This check prevents the crash
+        .filter(swap => {
+            const otherUser = swap.requester._id === currentUser._id ? swap.responder : swap.requester;
+            const nameMatch = otherUser.name.toLowerCase().includes(searchQuery.toLowerCase());
+            const statusMatch = filter === 'all' || swap.status === filter;
+            return nameMatch && statusMatch;
     });
 
     if (loading) return <p className="text-center text-white mt-8">Loading requests...</p>;
@@ -144,7 +149,6 @@ const SwapRequestsPage = () => {
                                 <img src={otherUser.profilePhoto} alt={otherUser.name} className="w-24 h-24 rounded-full border-4 border-gray-600" />
                                 <div className="flex-grow text-center md:text-left">
                                     <h3 className="text-xl font-bold text-white">{otherUser.name}</h3>
-                                    {/* UPDATED: Display logic for multiple skills */}
                                     <div className="text-sm text-gray-400 mt-2 space-y-2">
                                         <div>
                                             <p>{isResponder ? `${otherUser.name} requests:` : `You requested:`}</p>
@@ -162,7 +166,8 @@ const SwapRequestsPage = () => {
                                     <p className="text-gray-300 mt-3 italic">"{swap.message}"</p>
                                 </div>
                                 <div className="flex flex-col items-center space-y-2">
-                                    <p className="font-bold text-lg">Status: <span className={getStatusColor(swap.status)}>{swap.status.charAt(0).toUpperCase() + swap.status.slice(1)}</span></p>
+                                    {/* UPDATED: Added text color to the label */}
+                                    <p className="font-bold text-lg text-gray-300">Status: <span className={getStatusColor(swap.status)}>{swap.status.charAt(0).toUpperCase() + swap.status.slice(1)}</span></p>
                                     {isResponder && swap.status === 'pending' && (
                                         <div className="flex space-x-2">
                                             <button onClick={() => handleUpdateStatus(swap._id, 'accepted')} className="text-green-400 hover:text-green-300 font-bold">Accept</button>
