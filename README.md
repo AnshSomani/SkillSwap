@@ -8,7 +8,6 @@ request others in return
 
 Created for Odoo Hackathon by:
 
-
 Team Hexica
 
 Members:
