@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import Rating from '../components/Rating';
 import SkillTag from '../components/SkillTag';
-import Pagination from '../components/Pagination';
 import { RequestModal, LoginModal } from '../components/Modals';
 
 const HomePage = () => {
@@ -21,9 +20,6 @@ const HomePage = () => {
     
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [targetUserForSwap, setTargetUserForSwap] = useState(null);
-    
-    const [currentPage, setCurrentPage] = useState(1);
-    const usersPerPage = 3;
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -40,9 +36,10 @@ const HomePage = () => {
     }, []);
 
     useEffect(() => {
-        // UPDATED: Added a filter to exclude admin users from the list
+        // Filter out the current user and any admin accounts
         let result = users.filter(u => u._id !== currentUser?._id && u.role !== 'admin');
 
+        // Apply search query filter
         if (searchQuery) {
             result = result.filter(u =>
                 u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -51,16 +48,13 @@ const HomePage = () => {
             );
         }
 
+        // Apply availability filter
         if (availability !== 'All') {
             result = result.filter(u => u.availability === availability);
         }
 
         setFilteredUsers(result);
-        setCurrentPage(1);
     }, [users, searchQuery, availability, currentUser]);
-
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-    const paginatedUsers = filteredUsers.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
 
     const handleRequestClick = (user) => {
         if (!currentUser) {
@@ -114,7 +108,8 @@ const HomePage = () => {
                 </div>
 
                 <div className="space-y-4">
-                    {paginatedUsers.length > 0 ? paginatedUsers.map(user => (
+                    {/* The component now maps over the entire filteredUsers array */}
+                    {filteredUsers.length > 0 ? filteredUsers.map(user => (
                         <div key={user._id} className="bg-gray-900 p-4 rounded-lg border border-gray-700 flex flex-col md:flex-row items-center gap-6">
                             <img src={user.profilePhoto} alt={user.name} className="w-24 h-24 rounded-full border-4 border-gray-600" />
                             <div className="flex-grow text-center md:text-left">
@@ -146,7 +141,7 @@ const HomePage = () => {
                         <p className="text-center text-gray-400 py-8">No users found matching your criteria.</p>
                     )}
                 </div>
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                {/* The Pagination component has been removed */}
             </div>
         </div>
     );
