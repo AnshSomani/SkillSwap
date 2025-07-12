@@ -45,7 +45,8 @@ const userSchema = new mongoose.Schema({
     },
     profilePhoto: {
         type: String,
-        default: 'https://placehold.co/100x100/8b5cf6/ffffff?text=U',
+        // The default is now set dynamically in the controller, not here.
+        default: 'https://placehold.co/100x100/8b5cf6/ffffff?text=S',
     },
     skillsOffered: [String],
     skillsWanted: [String],

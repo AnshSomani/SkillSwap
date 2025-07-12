@@ -20,11 +20,16 @@ export const register = async (req, res) => {
         if (userExists) {
             return res.status(400).json({ success: false, message: 'User already exists' });
         }
+        
+        // --- NEW: Dynamically generate profile photo URL ---
+        const firstLetter = name.charAt(0).toUpperCase();
+        const profilePhotoUrl = `https://placehold.co/100x100/8b5cf6/ffffff?text=${firstLetter}`;
 
         const user = await User.create({
             name,
             email,
             password,
+            profilePhoto: profilePhotoUrl, // Set the dynamic URL here
         });
 
         if (user) {

@@ -52,13 +52,31 @@ const ProfilePage = () => {
         setLoading(true);
         try {
             const { data } = await api.put('/users/profile', profileData);
-            updateUser(data); // Update user in context
+            updateUser(data);
             showNotification('Profile updated successfully!');
         } catch (error) {
             console.error("Failed to update profile", error);
             showNotification('Failed to update profile.', 'error');
         }
         setLoading(false);
+    };
+
+    // --- NEW: Function to handle profile photo change ---
+    const handlePhotoChange = async () => {
+        const newPhotoUrl = prompt("Please enter the URL for your new profile photo:");
+        if (newPhotoUrl && newPhotoUrl.trim() !== '') {
+            setLoading(true);
+            try {
+                // We can use the same update profile route
+                const { data } = await api.put('/users/profile', { profilePhoto: newPhotoUrl });
+                updateUser(data); // Update context to show new photo immediately
+                showNotification('Profile photo updated!');
+            } catch (error) {
+                console.error("Failed to update photo", error);
+                showNotification('Failed to update photo.', 'error');
+            }
+            setLoading(false);
+        }
     };
 
     return (
@@ -119,7 +137,8 @@ const ProfilePage = () => {
                     </div>
                     <div className="flex flex-col items-center space-y-4">
                         <img src={profileData.profilePhoto} alt="Profile" className="w-32 h-32 rounded-full border-4 border-purple-500" />
-                        <button className="text-sm text-blue-400 hover:underline">Add/Edit/Remove</button>
+                        {/* UPDATED: Added onClick handler */}
+                        <button onClick={handlePhotoChange} className="text-sm text-blue-400 hover:underline">Add/Edit/Remove</button>
                     </div>
                 </div>
             </div>
