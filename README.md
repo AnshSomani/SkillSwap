@@ -23,4 +23,4 @@ Vanshika           vanshikasinglakkr@gmail.com
 
 Login Page:
 
-![alt text](images/Screenshot(11))
+![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(11).png)
