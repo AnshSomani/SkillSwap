@@ -15,13 +15,21 @@ Develop a Skill Swap Platform — a mini application that enables users to list 
 
 ---
 
-### **Video Link: [)**
+**Video Link:**
 
 ---
 
 ---
 
 ### **Live Website: [https://skill-swap-3y7n.onrender.com/](https://skill-swap-3y7n.onrender.com/)**
+
+---
+
+---
+
+**Admin Email: admin@skillswap.com**
+
+**Admin Password: supersecretpassword**
 
 ---
 
