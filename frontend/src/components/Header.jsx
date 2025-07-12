@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, LogOut } from 'lucide-react';
+import { LogIn, LogOut, Shield } from 'lucide-react';
 
 const Header = () => {
     const { currentUser, logout } = useAuth();
@@ -20,6 +20,13 @@ const Header = () => {
             <nav className="flex items-center space-x-4">
                 {currentUser ? (
                     <>
+                        {/* --- NEW: Conditional Admin Link --- */}
+                        {currentUser.role === 'admin' && (
+                             <Link to="/admin" className="flex items-center text-yellow-400 hover:text-yellow-300 transition">
+                                <Shield size={16} className="mr-1" />
+                                Admin
+                            </Link>
+                        )}
                         <Link to="/" className="text-gray-300 hover:text-white transition">Home</Link>
                         <Link to="/swaps" className="text-gray-300 hover:text-white transition">Swap Requests</Link>
                         <Link to="/profile" className="flex items-center space-x-2 text-gray-300 hover:text-white transition">

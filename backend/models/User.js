@@ -45,7 +45,6 @@ const userSchema = new mongoose.Schema({
     },
     profilePhoto: {
         type: String,
-        // The default is now set dynamically in the controller, not here.
         default: 'https://placehold.co/100x100/8b5cf6/ffffff?text=S',
     },
     skillsOffered: [String],
@@ -57,6 +56,11 @@ const userSchema = new mongoose.Schema({
     isPublic: {
         type: Boolean,
         default: true,
+    },
+    // --- NEW FIELD FOR BANNING USERS ---
+    isBanned: {
+        type: Boolean,
+        default: false,
     },
     ratings: [ratingSchema],
     avgRating: {
