@@ -21,6 +21,24 @@ Utkarsh Chauhan    utkarshcha21@gmail.com
 Vanshika           vanshikasinglakkr@gmail.com
 
 
+
 Login Page:
 
-![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(11).png)
+![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(15).png)
+
+Dashboard:
+
+![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(14).png)
+
+Swap Request:
+
+![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(13).png)
+
+Admin Dashboard:
+
+![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(16).png)
+
+Swap Monitoring:
+
+![Skill Swap Screenshot](https://github.com/AnshSomani/Skill_Swap/blob/main/images/Screenshot%20(17).png)
+
