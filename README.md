@@ -12,7 +12,7 @@ Team Hexica
 
 Members:
 
-Ansh Somani        anshsomani05@gmail.com
+Ansh Somani        anshsomani05@gmail.com  (Team Leader)
 
 Ambuj Jaiswal      ambujjais1@gmail.com
 
