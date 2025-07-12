@@ -23,4 +23,4 @@ Vanshika           vanshikasinglakkr@gmail.com
 
 Login Page:
 
-![alt text](images\Screenshot(11))
+![Skill Swap Screenshot](images/Screenshot(11).png)
