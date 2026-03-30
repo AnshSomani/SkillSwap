@@ -2,22 +2,10 @@ Problem Statement 1
 
 # Skill Swap Platform
 
-### Problem Statement
 Develop a Skill Swap Platform — a mini application that enables users to list their skills and request others in return.
 
-### Created by: Team Hexica
-| Name              | Email                       | Role          |
-| ----------------- | --------------------------- | ------------- |
-| Ansh Somani       | anshsomani05@gmail.com      | Team Leader   |
-| Ambuj Jaiswal     | ambujjais1@gmail.com        | Member        |
-| Utkarsh Chauhan   | utkarshcha21@gmail.com      | Member        |
-| Vanshika          | vanshikasinglakkr@gmail.com | Member        |
-
----
-
-**Video Link: [https://drive.google.com/file/d/1cFK8ESclgpVyttkCK7UqsVmZRL2y7A19/view?usp=sharing](https://drive.google.com/file/d/1cFK8ESclgpVyttkCK7UqsVmZRL2y7A19/view?usp=sharing)**
-
----
+### Created by:
+Ansh Somani || anshsomani05@gmail.com      
 
 ---
 
@@ -37,11 +25,11 @@ Develop a Skill Swap Platform — a mini application that enables users to list 
 
 | Login Page                               | Sign Up                     |
 | ---------------------------------------- | ---------------------------------------- |
-| ![Login Page](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(15).png) | ![Sign Up](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(18).png) |
+| ![Login Page](https://raw.githubusercontent.com/AnshSomani/SkillSwap/main/images/Screenshot%20(15).png) | ![Sign Up](https://raw.githubusercontent.com/AnshSomani/SkillSwap/main/images/Screenshot%20(18).png) |
 | **Swap Request Page** | **Dashboard** |
-| ![Swap Request](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(13).png) | ![Dashboard](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(14).png) |
+| ![Swap Request](https://raw.githubusercontent.com/AnshSomani/SkillSwap/main/images/Screenshot%20(13).png) | ![Dashboard](https://raw.githubusercontent.com/AnshSomani/SkillSwap/main/images/Screenshot%20(14).png) |
 | **Swap Monitoring (Admin)** | **Admin Dashboard** |
-| ![Swap Monitoring](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(17).png) |![Admin Dashboard](https://raw.githubusercontent.com/AnshSomani/Skill_Swap/main/images/Screenshot%20(16).png)|
+| ![Swap Monitoring](https://raw.githubusercontent.com/AnshSomani/SkillSwap/main/images/Screenshot%20(17).png) |![Admin Dashboard](https://raw.githubusercontent.com/AnshSomani/SkillSwap/main/images/Screenshot%20(16).png)|
 
 ---
 
@@ -71,10 +59,10 @@ Develop a Skill Swap Platform — a mini application that enables users to list 
 
 | Category      | Technology                                       |
 | ------------- | ------------------------------------------------ |
-| **Frontend** | React (Vite), Tailwind CSS, Axios                |
-| **Backend** | Node.js, Express.js                              |
-| **Database** | MongoDB (Mongoose)                               |
-| **Auth** | JSON Web Tokens (JWT), bcryptjs                  |
+| **Frontend** | React (Vite), Tailwind CSS, Axios                 |
+| **Backend** | Node.js, Express.js                                |
+| **Database** | MongoDB (Mongoose)                                |
+| **Auth** | JSON Web Tokens (JWT), bcryptjs                       |
 | **Deployment**| Render                                           |
 
 ---
