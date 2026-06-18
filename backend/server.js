@@ -1,8 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import path from 'path'; // Import path module
-import { fileURLToPath } from 'url'; // Import url module
 
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
@@ -21,8 +19,23 @@ const app = express();
 // Body parser
 app.use(express.json());
 
-// Enable CORS - This is still useful for development
-app.use(cors());
+// Enable CORS — allow requests from the deployed frontend URL and localhost dev
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.FRONTEND_URL, // set this in Vercel env vars to your frontend deployment URL
+].filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. curl, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`CORS policy: origin ${origin} not allowed`));
+    },
+    credentials: true,
+  })
+);
 
 // --- API Routes ---
 app.use('/api/auth', authRoutes);
@@ -30,27 +43,18 @@ app.use('/api/users', userRoutes);
 app.use('/api/swaps', swapRoutes);
 app.use('/api/admin', adminRoutes);
 
-// --- Deployment Configuration ---
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Health check / root
+app.get('/', (req, res) => {
+  res.json({ message: 'SkillSwap API is running ✅' });
+});
 
-// Check if in production environment
-if (process.env.NODE_ENV === 'production') {
-  // Set the frontend build folder as a static folder
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-  // For any route that is not an API route, serve the frontend's index.html file
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'))
+// Only start the HTTP server when NOT running inside Vercel (i.e. local dev)
+if (process.env.VERCEL !== '1') {
+  const PORT = process.env.PORT || 5001;
+  app.listen(PORT, () =>
+    console.log(`Server running on port ${PORT}`)
   );
-} else {
-  // In development, just confirm the API is running
-  app.get('/', (req, res) => {
-    res.send('API is running....');
-  });
 }
 
-
-const PORT = process.env.PORT || 5001;
-
-app.listen(PORT, () => console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`));
+// Export for Vercel serverless
+export default app;
