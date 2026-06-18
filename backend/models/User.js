@@ -76,13 +76,33 @@ const userSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-// Encrypt password using bcrypt
+// Helper to generate initials from a name
+export const getInitials = (name) => {
+    if (!name) return 'U';
+    const nameParts = name.trim().split(/\s+/);
+    if (nameParts.length > 1) {
+        return (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+    } else if (nameParts.length === 1 && nameParts[0].length > 0) {
+        return nameParts[0].charAt(0).toUpperCase();
+    }
+    return 'U';
+};
+
+// Encrypt password using bcrypt and set profilePhoto initials if not specified
 userSchema.pre('save', async function (next) {
+    if (!this.profilePhoto || this.profilePhoto.endsWith('?text=S') || this.profilePhoto === 'https://placehold.co/100x100/8b5cf6/ffffff?text=S') {
+        const initials = getInitials(this.name);
+        // Default color for user profile background
+        const bgColor = this.role === 'admin' ? '10b981' : '8b5cf6';
+        this.profilePhoto = `https://placehold.co/100x100/${bgColor}/ffffff?text=${initials}`;
+    }
+
     if (!this.isModified('password')) {
-        next();
+        return next();
     }
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
+    next();
 });
 
 // Match user entered password to hashed password in database

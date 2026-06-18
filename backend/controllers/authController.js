@@ -1,4 +1,4 @@
-import User from '../models/User.js';
+import User, { getInitials } from '../models/User.js';
 import jwt from 'jsonwebtoken';
 
 // Generate JWT
@@ -26,8 +26,8 @@ export const register = async (req, res) => {
             return res.status(400).json({ success: false, message: 'User already exists' });
         }
         
-        const firstLetter = name.charAt(0).toUpperCase();
-        const profilePhotoUrl = `https://placehold.co/100x100/8b5cf6/ffffff?text=${firstLetter}`;
+        const initials = getInitials(name);
+        const profilePhotoUrl = `https://placehold.co/100x100/8b5cf6/ffffff?text=${initials}`;
 
         const user = await User.create({
             name,
@@ -64,8 +64,8 @@ export const login = async (req, res) => {
 
             if (!adminUser) {
                 // If admin user doesn't exist, create it on first login
-                const firstLetter = "A";
-                const profilePhotoUrl = `https://placehold.co/100x100/10b981/ffffff?text=${firstLetter}`;
+                const initials = getInitials('Admin');
+                const profilePhotoUrl = `https://placehold.co/100x100/10b981/ffffff?text=${initials}`;
 
                 adminUser = await User.create({
                     name: 'Admin',
