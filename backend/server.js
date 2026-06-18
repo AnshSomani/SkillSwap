@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
+import mongoose from 'mongoose';
+
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
@@ -11,10 +13,21 @@ import adminRoutes from './routes/admin.js';
 // Load env vars
 dotenv.config();
 
-// Connect to database
-connectDB();
-
 const app = express();
+
+// Lazy database connection middleware for serverless environment
+let isDbConnected = false;
+app.use(async (req, res, next) => {
+  if (!isDbConnected && mongoose.connection.readyState !== 1) {
+    try {
+      await connectDB();
+      isDbConnected = true;
+    } catch (err) {
+      console.error('Database connection failed in middleware:', err);
+    }
+  }
+  next();
+});
 
 // Body parser
 app.use(express.json());
