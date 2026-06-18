@@ -45,7 +45,11 @@ app.use('/api/admin', adminRoutes);
 
 // Health check / root
 app.get('/', (req, res) => {
-  res.json({ message: 'SkillSwap API is running ✅' });
+  res.json({ 
+    message: 'SkillSwap API is running ✅',
+    dbState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    dbCode: mongoose.connection.readyState
+  });
 });
 
 // Only start the HTTP server when NOT running inside Vercel (i.e. local dev)
