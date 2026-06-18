@@ -7,7 +7,7 @@ Ansh Somani || anshsomani05@gmail.com
 
 ---
 
-### **Live Website: [https://skill-swap-3y7n.onrender.com/](https://skill-swap-3y7n.onrender.com/)**
+### **Live Website: [https://skill-swap-kht6.vercel.app/](https://skill-swap-kht6.vercel.app/)**
 
 ---
 
