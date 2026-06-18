@@ -48,7 +48,8 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'SkillSwap API is running ✅',
     dbState: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
-    dbCode: mongoose.connection.readyState
+    dbCode: mongoose.connection.readyState,
+    error: global.mongoError || null
   });
 });
 
